@@ -1,5 +1,7 @@
 import "./App.css";
 import React, { useState } from "react";
+import TodoElement from "./TodoElement";
+import AddTodo from "./AddTodo";
 
 const TodoApp = () => {
   const [value, setValue] = useState("");
@@ -13,14 +15,27 @@ const TodoApp = () => {
   const add = () => {
     const newTodo = [...todoList, value];
     setTodoList(newTodo);
+    setValue("");
+  };
+
+  const handleDelete = (id) => {
+    const newTodoList = todoList.filter((todo) => todo.id !== id);
+    setTodoList(newTodoList);
   };
 
   return (
     <div className="App">
       <h1>TODO App</h1>
-      <input type="text" value={value} onChange={handleChange} />
-      <p>{value}</p>
-      <button onClick={add}>追加</button>
+      <AddTodo value={value} onChange={handleChange} add={add} />
+      <ul>
+        {todoList.map((todo) => (
+          <TodoElement
+            key={todo.id}
+            content={todo.content}
+            onDelete={() => handleDelete(todo.id)}
+          />
+        ))}
+      </ul>
     </div>
   );
 };
